@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.services";
+
+
+package example;
+
+
+message Common {
+    message Operators {
+        bool eq = 1;
+        bool ne = 2;
+        bool in = 3;
+        bool and = 4;
+        bool or = 5;
+    }
+   Operators operators = 1;
+}

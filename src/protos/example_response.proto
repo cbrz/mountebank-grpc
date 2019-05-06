@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.services";
+
+
+package example;
+
+import "common/common.proto";
+
+
+message ExampleResponse {
+    int32 id = 1;
+    string data = 2;
+    Common common = 3;
+}

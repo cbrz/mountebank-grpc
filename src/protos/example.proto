@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.services";
+
+
+package example; // service at example.ExampleService
+// package example.service; // service at example.service.ExampleService
+
+import "example_request.proto";
+import "example_response.proto";
+
+
+service ExampleService {
+    rpc ExampleUnaryUnaryCall (ExampleRequest) returns (ExampleResponse) {}
+    rpc ExampleStreamUnaryCall (stream ExampleRequest) returns (ExampleResponse) {}
+    rpc ExampleUnaryStreamCall (ExampleRequest) returns (stream ExampleResponse) {}
+    rpc ExampleStreamStreamCall (stream ExampleRequest) returns (stream ExampleResponse) {}
+}

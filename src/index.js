@@ -1,49 +1,6 @@
 'use strict'
 
 // main entry point
-/* example config
-{
-    "protocol": "grpc",
-    "port": 4545,
-    "loglevel": "debug",
-    "recordRequests": true,
-    "services": [{
-        "service": "example.ExampleService",
-        "file": "/etc/mountebank/mountebank-grpc/src/protos/example.proto"
-    }],
-    "stubs": [{
-        "predicates": [
-            {
-                "matches": { "path": "UnaryUnary" },
-                "caseSensitive": false
-            }
-        ],
-        "responses": [
-            {
-                "is": {
-                    "value": {
-                        "id": 100,
-                        "data": "mock response"
-                    },
-                    "metadata": {
-                        "initial": {
-                            "metadata-initial-key": "metadata-initial-value"
-                        },
-                        "trailing": {
-                            "metadata-trailing-key": "metadata-trailing-value"
-                        }
-                    },
-                    "error": {
-                        "status": "OUT_OF_RANGE",
-                        "message": "invalid message"
-                    }
-                }
-            }
-        ]
-    }]
-}
-*/
-
 const
     constants = require('./constants'),
     detectport = require('detect-port'),
@@ -54,7 +11,6 @@ const
 
 
 const main = () => {
-    // const argv = parseArgs(process.argv.slice(2));
     const config = JSON.parse(process.argv[2]);
     logging.setLogLevel(config.loglevel || constants.LOGGING.INFO.LEVEL);
 

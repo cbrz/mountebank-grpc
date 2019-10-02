@@ -5,12 +5,10 @@ const
 
 describe('server calls', () => {
     describe('get unary request', () => {
-        const call = {
-            request: 'data',
-            getPeer: jest.fn(() => 'peer'),
-            metadata: {
-                getMap: jest.fn(() => {})
-            }
+        const call = new events.EventEmitter();
+        call.getPeer = jest.fn(() => 'peer');
+        call.metadata = {
+            getMap: jest.fn(() => {})
         };
 
         test('gets unary request from call', () => {

@@ -4,13 +4,11 @@
 
 const
     grpc = require('grpc'),
-    protoLoader = require('@grpc/proto-loader'),
-    log = require('../helpers/logging').logger();
+    protoLoader = require('@grpc/proto-loader');
 
 
 
 const getClientDefinition = (serviceOptions, protobufjsOptions) => {
-    log.info("get service definition");
     protobufjsOptions = protobufjsOptions || {
         keepCase: true,
         longs: String,
@@ -21,15 +19,15 @@ const getClientDefinition = (serviceOptions, protobufjsOptions) => {
     const packageDef = protoLoader.loadSync(serviceOptions.file, protobufjsOptions);
     let definition = grpc.loadPackageDefinition(packageDef);
     serviceOptions.service.split(".").forEach(path => {
-        if (path == undefined) return undefined;
-        definition = definition[path];
+        if (definition && path) {
+            definition = definition[path];
+        }
     });
     return definition;
 }
 
 
 const getServiceDefinition = (serviceOptions, protobufjsOptions) => {
-    log.info("get service definition");
     protobufjsOptions = protobufjsOptions || {
         keepCase: true,
         longs: String,
@@ -40,8 +38,9 @@ const getServiceDefinition = (serviceOptions, protobufjsOptions) => {
     const packageDef = protoLoader.loadSync(serviceOptions.file, protobufjsOptions);
     let definition = grpc.loadPackageDefinition(packageDef);
     serviceOptions.service.split(".").concat(["service"]).forEach(path => {
-        if (path == undefined) return undefined;
-        definition = definition[path];
+        if (definition && path) {
+            definition = definition[path];
+        }
     });
     return definition;
 }

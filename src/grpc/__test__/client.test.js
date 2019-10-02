@@ -3,7 +3,7 @@
 const grpc = require('grpc'),
     client = require('../client'),
     grpcImpl = require('./grpc-impl'),
-    ENDPOINT = '0.0.0.0:50051';
+    ENDPOINT = '0.0.0.0:63051';
 
 
 const createClientOptions = (method) => {
@@ -20,7 +20,7 @@ describe('integration test: client calls', () => {
         const server = grpcImpl.successServer()
 
         beforeAll(() => {
-            server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
+            server.bind(ENDPOINT, grpc.ServerCredentials.createInsecure());
             server.start();
         });
 
@@ -133,7 +133,7 @@ describe('integration test: client calls', () => {
         const server = grpcImpl.errorServer()
 
         beforeAll(() => {
-            server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
+            server.bind(ENDPOINT, grpc.ServerCredentials.createInsecure());
             server.start();
         });
 

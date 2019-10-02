@@ -9,7 +9,7 @@ let loglevel = constants.LOGGING.DEBUG.LEVEL
 
 
 const setLogLevel = (level) => {
-    if (level && constants.LOGGING.hasOwnProperty(level.toUpperCase())) {
+    if (level && level.toUpperCase() in constants.LOGGING) {
         loglevel = constants.LOGGING[level.toUpperCase()].LEVEL;
     }
 }

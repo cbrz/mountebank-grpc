@@ -16,10 +16,24 @@ const getServerInstance = (config) => {
         server = new grpc.Server(),
         mbOptions = {
             callbackURL: config.callbackURLTemplate.replace(':port', config.port)
-        };
-    Object.keys(config.services).forEach((key) => {
-        const serviceDefinition = service.getServiceDefinition(config.services[key]),
-            clientDefinition = service.getClientDefinition(config.services[key]),
+        },
+        serverOptions = Object.assign({}, config.options),
+        defaultProtobufjsOptions = {
+            keepCase: true,
+            longs: String,
+            enums: String,
+            defaults: true,
+            oneofs: true
+        },
+        protobufjsOptions = Object.assign({}, defaultProtobufjsOptions, serverOptions.protobufjs);
+    if (protobufjsOptions.includeDirs) {
+        protobufjsOptions.includeDirs = Object.values(protobufjsOptions.includeDirs);
+    }
+    Object.entries(config.services).forEach(([key, value]) => {
+        const
+            serviceOptions = {service: key, file: value.file},
+            serviceDefinition = service.getServiceDefinition(serviceOptions, protobufjsOptions),
+            clientDefinition = service.getClientDefinition(serviceOptions, protobufjsOptions),
             implementation = createImplementation(mbOptions, serviceDefinition, clientDefinition);
         server.addService(serviceDefinition, implementation);
     })
@@ -48,7 +62,7 @@ const createImplementation = (mbOptions, serviceDefinition, clientDefinition) =>
 
 const createUnaryUnaryMockCall = (mbOptions, rpcinfo, clientDefinition) => {
     return (call, callback) => {
-        log.info('sending unary-unary rpc');
+        log.debug('sending unary-unary rpc');
         const request = server.getUnaryRequest(call);
         request.path = rpcinfo.path;
         (async () => {
@@ -72,7 +86,7 @@ const createUnaryUnaryMockCall = (mbOptions, rpcinfo, clientDefinition) => {
 
 const createUnaryStreamMockCall = (mbOptions, rpcinfo, clientDefinition) => {
     return (call) => {
-        log.info('sending unary-stream rpc');
+        log.debug('sending unary-stream rpc');
         const request = server.getUnaryRequest(call);
         request.path = rpcinfo.path;
         (async () => {

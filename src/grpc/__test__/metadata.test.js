@@ -1,5 +1,4 @@
-const grpc = require('grpc'),
-    metadata = require('../metadata');
+const metadata = require('../metadata');
 
 
 describe('metadata module', () => {
@@ -12,10 +11,10 @@ describe('metadata module', () => {
         });
 
         test('converts binary key', () => {
-            const request = { 'key-bin': 'value' };
+            const request = { 'key-bin': 'dmFsdWU=' };
             const response = metadata.mapToMetadata(request);
 
-            expect(response.get('key-bin')).toEqual([Buffer.from(request['key-bin'])]);
+            expect(response.get('key-bin')).toEqual([Buffer.from(request['key-bin'], 'base64')]);
         });
 
         test('returns on undefined request', () => {

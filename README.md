@@ -38,11 +38,18 @@ To load a gRPC imposter (via `POST http://<MB_SERVER>:<MB_PORT>/imposters`):
     "port": 4545,
     "loglevel": "debug",
     "recordRequests": true,
-    "services": [{
+    "services": {
         "_note": "need the name of the service and protofile location for this to load",
-        "service": "example.ExampleService",
-        "file": "/etc/mountebank/mountebank-grpc/src/protos/example.proto"
-    }],
+        "example.ExampleService": {
+            "file": "example.proto"
+        }
+    },
+    "options": {
+        "protobufjs": {
+            "_note": "any options to protobufjs",
+            "includeDirs": ["/path/to/include/protos", "/etc/mountebank/mountebank-grpc/src/protos"]
+        }
+    },
     "stubs": [{
         "predicates": [
             {
@@ -88,10 +95,11 @@ To load a gRPC proxy imposter:
     "port": 4546,
     "loglevel": "debug",
     "recordRequests": true,
-    "services": [{
-        "service": "example.ExampleService",
-        "file": "/etc/mountebank/mountebank-grpc/src/protos/example.proto"
-    }],
+    "services": {
+        "example.ExampleService": {
+            "file": "/etc/mountebank/mountebank-grpc/src/protos/example.proto"
+        }
+    },
     "stubs": [
         {
             "responses": [

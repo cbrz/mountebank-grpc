@@ -21,7 +21,7 @@ describe('test send request',() => {
         axios.post.mockImplementation(() => Promise.resolve(response))
 
         return mbRequest.sendRequest(url, request)
-            .then(res => {
+            .then(() => {
                 expect(axios.post).toBeCalled();
                 expect(axios.post).toBeCalledWith(url, request);
             });

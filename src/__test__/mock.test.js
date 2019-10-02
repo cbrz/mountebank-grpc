@@ -1,5 +1,4 @@
 const
-    grpc = require('grpc'),
     mock= require('../mock');
 
 
@@ -12,12 +11,11 @@ const path = require('path'),
         port: 4545,
         loglevel: 'debug',
         allowInjection: false,
-        services: [
-            {
-                service: 'example.ExampleService',
+        services: {
+            'example.ExampleService': {
                 file: PROTO_PATH
             }
-        ]
+        }
     };
 
 

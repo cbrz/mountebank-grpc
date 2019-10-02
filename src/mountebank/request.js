@@ -6,8 +6,8 @@ const axios = require('axios'),
 
 
 const sendRequest = async (url, data) => {
-    log.info('send request to mountebank');
-    log.debug(`url='%s', data='%s', config='%s'`, url, JSON.stringify(data));
+    log.debug('send request to mountebank');
+    log.debug(`url='%s', data='%s'`, url, JSON.stringify(data));
     try {
         const response = await axios.post(url, data);
         log.debug(`response.data="%s"`, JSON.stringify(response.data));

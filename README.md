@@ -38,8 +38,8 @@ To load a gRPC imposter (via `POST http://<MB_SERVER>:<MB_PORT>/imposters`):
     "port": 4545,
     "loglevel": "debug",
     "recordRequests": true,
+    "_note_services": "need the name of the package, service and protofile location for this to load",
     "services": {
-        "_note": "need the name of the service and protofile location for this to load",
         "example.ExampleService": {
             "file": "example.proto"
         }

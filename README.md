@@ -6,13 +6,18 @@ This makes use of nodejs and the google-protobuf and @grpc/proto-loader modules 
 
 ## Setup
 
-Clone project:
+Install:
 
-    git clone git@github.com:cbrz/mountebank-grpc.git
+    npm install -g mountebank
 
-Build project:
+Billions of other install options are [also available](https://www.mbtest.org/docs/install) with no platform dependencies.
 
-    npm install
+Run:
+
+    mb
+
+There are a number of [command line options](https://www.mbtest.org/docs/commandLine) if you need
+to customize mountebank.
 
 Create protocols.json file for gRPC:
 

@@ -1,39 +1,38 @@
 'use strict'
 
-const
-    sprintfJs = require('sprintf-js'),
-    constants = require('../constants');
+import { sprintf } from 'sprintf-js';
+import { LOGGING } from '../constants.js';
 
 
-let loglevel = constants.LOGGING.DEBUG.LEVEL
+let loglevel = LOGGING.DEBUG.LEVEL
 
 
 const setLogLevel = (level) => {
-    if (level && level.toUpperCase() in constants.LOGGING) {
-        loglevel = constants.LOGGING[level.toUpperCase()].LEVEL;
+    if (level && level.toUpperCase() in LOGGING) {
+        loglevel = LOGGING[level.toUpperCase()].LEVEL;
     }
 }
 
 
 const instance = {
     debug: (...msg) => {
-        if (loglevel <= constants.LOGGING.DEBUG.LEVEL) {
-            console.log(formatMessage(constants.LOGGING.DEBUG.DESCRIPTION, ...msg));
+        if (loglevel <= LOGGING.DEBUG.LEVEL) {
+            console.log(formatMessage(LOGGING.DEBUG.DESCRIPTION, ...msg));
         }
     },
     info: (...msg) => {
-        if (loglevel <= constants.LOGGING.INFO.LEVEL) {
-            console.log(formatMessage(constants.LOGGING.INFO.DESCRIPTION, ...msg));
+        if (loglevel <= LOGGING.INFO.LEVEL) {
+            console.log(formatMessage(LOGGING.INFO.DESCRIPTION, ...msg));
         }
     },
     warn: (...msg) => {
-        if (loglevel <= constants.LOGGING.WARN.LEVEL) {
-            console.log(formatMessage(constants.LOGGING.WARN.DESCRIPTION, ...msg));
+        if (loglevel <= LOGGING.WARN.LEVEL) {
+            console.log(formatMessage(LOGGING.WARN.DESCRIPTION, ...msg));
         }
     },
     error: (...msg) => {
-        if (loglevel <= constants.LOGGING.ERROR.LEVEL) {
-            console.log(formatMessage(constants.LOGGING.ERROR.DESCRIPTION, ...msg));
+        if (loglevel <= LOGGING.ERROR.LEVEL) {
+            console.log(formatMessage(LOGGING.ERROR.DESCRIPTION, ...msg));
         }
     }
 }
@@ -48,7 +47,7 @@ const timestamp = () => `${new Date().toISOString()}`
 
 
 const formatMessage = (level, ...msg) => {
-    return `${level} [${timestamp()}] ${sprintfJs.sprintf(...msg)}`
+    return `${level} [${timestamp()}] ${sprintf(...msg)}`
 }
 
-module.exports = { logger, setLogLevel }
+export default { logger, setLogLevel }

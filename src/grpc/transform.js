@@ -36,6 +36,6 @@ const walk = (data, callback) => {
 }
 
 
-module.exports = {
-    bufferToBase64,
+export {
+    bufferToBase64
 }

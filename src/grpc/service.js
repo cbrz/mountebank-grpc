@@ -2,9 +2,8 @@
 
 // return a grpc server with the definitions/implementations populated
 
-const
-    grpc = require('grpc'),
-    protoLoader = require('@grpc/proto-loader');
+import { loadPackageDefinition } from '@grpc/grpc-js';
+import { loadSync } from '@grpc/proto-loader';
 
 
 
@@ -16,8 +15,8 @@ const getClientDefinition = (serviceOptions, protobufjsOptions) => {
         defaults: true,
         oneofs: true
     };
-    const packageDef = protoLoader.loadSync(serviceOptions.file, protobufjsOptions);
-    let definition = grpc.loadPackageDefinition(packageDef);
+    const packageDef = loadSync(serviceOptions.file, protobufjsOptions);
+    let definition = loadPackageDefinition(packageDef);
     serviceOptions.service.split(".").forEach(path => {
         if (definition && path) {
             definition = definition[path];
@@ -35,8 +34,8 @@ const getServiceDefinition = (serviceOptions, protobufjsOptions) => {
         defaults: true,
         oneofs: true
     };
-    const packageDef = protoLoader.loadSync(serviceOptions.file, protobufjsOptions);
-    let definition = grpc.loadPackageDefinition(packageDef);
+    const packageDef = loadSync(serviceOptions.file, protobufjsOptions);
+    let definition = loadPackageDefinition(packageDef);
     serviceOptions.service.split(".").concat(["service"]).forEach(path => {
         if (definition && path) {
             definition = definition[path];
@@ -46,7 +45,7 @@ const getServiceDefinition = (serviceOptions, protobufjsOptions) => {
 }
 
 
-module.exports = {
+export default {
     getServiceDefinition,
     getClientDefinition,
 }

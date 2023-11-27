@@ -1,5 +1,4 @@
-const
-    mock= require('../mock');
+const mock= require('../mock');
 
 
 // default implementations that shouldn't fail

@@ -2,9 +2,9 @@
 
 // mock calls for grpc
 
-const grpc = require('grpc'),
-    transform = require('./transform'),
-    metadata = require('./metadata');
+import * as grpc from '@grpc/grpc-js';
+import { bufferToBase64 } from './transform.js';
+import { mapToMetadata } from './metadata.js';
 
 
 const createRequest = () => {
@@ -22,7 +22,7 @@ const createRequest = () => {
 
 
 const getUnaryRequest = (call) => {
-    const t = (d) => transform.bufferToBase64(d);
+    const t = (d) => bufferToBase64(d);
     const request = createRequest();
     request.peer = call.getPeer();
     request.canceled = call.canceled;
@@ -36,7 +36,7 @@ const getUnaryRequest = (call) => {
 
 
 const getStreamRequest = (call) => {
-    const t = (d) => transform.bufferToBase64(d);
+    const t = (d) => bufferToBase64(d);
     const request = createRequest();
     request.peer = call.getPeer();
     request.canceled = call.canceled;
@@ -54,52 +54,52 @@ const getStreamRequest = (call) => {
 
 
 const sendUnaryResponse = (response, call, callback) => {
-    const t = (d) => transform.bufferToBase64(d);
+    const t = (d) => bufferToBase64(d);
     const error = t(response.error),
         value = t(response.value),
         md = t(response.metadata);
 
     if (md && md.initial) {
-        call.sendMetadata(metadata.mapToMetadata(md.initial));
+        call.sendMetadata(mapToMetadata(md.initial));
     }
 
     if (error) {
         callback({
             code: grpc.status[error.status || 'INTERNAL'],
             message: error.message || 'error message',
-            metadata: (md && md.trailing) ? metadata.mapToMetadata(md.trailing) : undefined
+            metadata: (md && md.trailing) ? mapToMetadata(md.trailing) : undefined
         });
     } else {
-        callback(null, value, (md && md.trailing) ? metadata.mapToMetadata(md.trailing) : undefined);
+        callback(null, value, (md && md.trailing) ? mapToMetadata(md.trailing) : undefined);
     }
 };
 
 
 const sendStreamResponse = (response, call) => {
-    const t = (d) => transform.bufferToBase64(d);
+    const t = (d) => bufferToBase64(d);
     const error = t(response.error),
         value = t(response.value) || [],
         md = t(response.metadata);
 
     if (md && md.initial) {
-        call.sendMetadata(metadata.mapToMetadata(md.initial));
+        call.sendMetadata(mapToMetadata(md.initial));
     }
 
     if (error) {
         call.emit('error', {
             code: grpc.status[error.status || 'INTERNAL'],
             message: error.message || 'error message',
-            metadata: (md && md.trailing) ? metadata.mapToMetadata(md.trailing) : undefined
+            metadata: (md && md.trailing) ? mapToMetadata(md.trailing) : undefined
         });
         return;
     } else {
         value.forEach(v => call.write(v));
     }
-    call.end((md && md.trailing) ? metadata.mapToMetadata(md.trailing) : undefined);
+    call.end((md && md.trailing) ? mapToMetadata(md.trailing) : undefined);
 };
 
 
-module.exports = {
+export default {
     getStreamRequest,
     getUnaryRequest,
     sendStreamResponse,

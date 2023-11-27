@@ -23,4 +23,4 @@ const LOGGING = {
     }
 }
 
-module.exports = { PROTOCOL, LOGGING };
+export { PROTOCOL, LOGGING };

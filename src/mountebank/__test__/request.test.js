@@ -1,15 +1,15 @@
 jest.mock('axios');
-const axios = require('axios'),
-    mbRequest = require('../request');
+import { post } from 'axios';
+import { sendRequest } from '../request.js';
 
 
 describe('test send request',() => {
     test('should send response', () => {
         const request = { test: 'value' },
             response = { data: request };
-        axios.post.mockImplementation(() => Promise.resolve(response))
+        post.mockImplementation(() => Promise.resolve(response))
 
-        return mbRequest.sendRequest(request)
+        return sendRequest(request)
             .then(res => expect(res).toEqual(request));
     });
 
@@ -18,12 +18,12 @@ describe('test send request',() => {
             response = {data: request},
             url = 'http://mb.com';
         // mbRequest.setUrl(url);
-        axios.post.mockImplementation(() => Promise.resolve(response))
+        post.mockImplementation(() => Promise.resolve(response))
 
-        return mbRequest.sendRequest(url, request)
+        return sendRequest(url, request)
             .then(() => {
-                expect(axios.post).toBeCalled();
-                expect(axios.post).toBeCalledWith(url, request);
+                expect(post).toBeCalled();
+                expect(post).toBeCalledWith(url, request);
             });
     });
 });

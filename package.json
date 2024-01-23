@@ -1,6 +1,7 @@
 {
   "name": "mountebank-grpc",
   "version": "0.1.0",
+  "type": "module",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -9,16 +10,16 @@
     "test": "jest --silent"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.9.11",
     "@grpc/proto-loader": "^0.1.0",
-    "axios": "^0.18.0",
+    "axios": "^1.6.2",
     "google-protobuf": "^3.0.0",
-    "grpc": "^1.11.0",
     "sprintf-js": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "^6.5.1",
-    "jest": "^24.8.0",
-    "nodemon": "^1.19.0"
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
   },
   "author": "",
   "license": "ISC"

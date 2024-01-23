@@ -2,18 +2,18 @@
 
 // mock implementation
 
-const
-    grpc = require('grpc'),
-    mb = require('./mountebank/request'),
-    client = require('./grpc/client'),
-    server = require('./grpc/server'),
-    service = require('./grpc/service'),
-    log = require('./helpers/logging').logger();
+import { Server } from '@grpc/grpc-js';
+import { sendRequest } from './mountebank/request.js';
+import client from './grpc/client.js';
+import server from './grpc/server.js';
+import service from './grpc/service.js';
+import logging from './helpers/logging.js'
+const log = logging.logger();
 
 
 const getServerInstance = (config) => {
     const
-        server = new grpc.Server(),
+        server = new Server(),
         mbOptions = {
             callbackURL: config.callbackURLTemplate.replace(':port', config.port)
         },
@@ -66,7 +66,7 @@ const createUnaryUnaryMockCall = (mbOptions, rpcinfo, clientDefinition) => {
         const request = server.getUnaryRequest(call);
         request.path = rpcinfo.path;
         (async () => {
-            const mbResponse = await mb.sendRequest(mbOptions.callbackURL, {request: request});
+            const mbResponse = await sendRequest(mbOptions.callbackURL, {request: request});
             let response = mbResponse.response;
             if (mbResponse.proxy) {
                 const clientOptions = {
@@ -76,7 +76,7 @@ const createUnaryUnaryMockCall = (mbOptions, rpcinfo, clientDefinition) => {
                 };
                 response = await client.sendUnaryUnaryCall(clientOptions, mbResponse.request);
                 log.debug(`proxy_response='%s'`, JSON.stringify(response));
-                await mb.sendRequest(mbResponse.callbackURL, {proxyResponse: response});
+                await sendRequest(mbResponse.callbackURL, {proxyResponse: response});
             }
             server.sendUnaryResponse(response, call, callback);
         })();
@@ -90,7 +90,7 @@ const createUnaryStreamMockCall = (mbOptions, rpcinfo, clientDefinition) => {
         const request = server.getUnaryRequest(call);
         request.path = rpcinfo.path;
         (async () => {
-            const mbResponse = await mb.sendRequest(mbOptions.callbackURL, {request: request});
+            const mbResponse = await sendRequest(mbOptions.callbackURL, {request: request});
             let response = mbResponse.response;
             if (mbResponse.proxy) {
                 const clientOptions = {
@@ -100,7 +100,7 @@ const createUnaryStreamMockCall = (mbOptions, rpcinfo, clientDefinition) => {
                 };
                 response = await client.sendUnaryStreamCall(clientOptions, mbResponse.request);
                 log.debug(`proxy_response='%s'`, JSON.stringify(response));
-                await mb.sendRequest(mbResponse.callbackURL, {proxyResponse: response});
+                await sendRequest(mbResponse.callbackURL, {proxyResponse: response});
             }
             server.sendStreamResponse(response, call);
         })();
@@ -115,7 +115,7 @@ const createStreamUnaryMockCall = (mbOptions, rpcinfo, clientDefinition) => {
         request.path = rpcinfo.path;
         call.on('end', () => {
             (async () => {
-                const mbResponse = await mb.sendRequest(mbOptions.callbackURL, {request: request});
+                const mbResponse = await sendRequest(mbOptions.callbackURL, {request: request});
                 let response = mbResponse.response;
                 if (mbResponse.proxy) {
                     const clientOptions = {
@@ -125,7 +125,7 @@ const createStreamUnaryMockCall = (mbOptions, rpcinfo, clientDefinition) => {
                     };
                     response = await client.sendStreamUnaryCall(clientOptions, mbResponse.request);
                     log.debug(`proxy_response='%s'`, JSON.stringify(response));
-                    await mb.sendRequest(mbResponse.callbackURL, {proxyResponse: response});
+                    await sendRequest(mbResponse.callbackURL, {proxyResponse: response});
                 }
                 server.sendUnaryResponse(response, call, callback);
             })();
@@ -140,7 +140,7 @@ const createStreamStreamMockCall = (mbOptions, rpcinfo, clientDefinition) => {
         request.path = rpcinfo.path;
         call.on('end', () => {
             (async () => {
-                const mbResponse = await mb.sendRequest(mbOptions.callbackURL, {request: request});
+                const mbResponse = await sendRequest(mbOptions.callbackURL, {request: request});
                 let response = mbResponse.response;
                 if (mbResponse.proxy) {
                     const clientOptions = {
@@ -150,7 +150,7 @@ const createStreamStreamMockCall = (mbOptions, rpcinfo, clientDefinition) => {
                     };
                     response = await client.sendStreamStreamCall(clientOptions, mbResponse.request);
                     log.debug(`proxy_response='%s'`, JSON.stringify(response));
-                    await mb.sendRequest(mbResponse.callbackURL, {proxyResponse: response});
+                    await sendRequest(mbResponse.callbackURL, {proxyResponse: response});
                 }
                 server.sendStreamResponse(response, call);
             })();
@@ -159,6 +159,6 @@ const createStreamStreamMockCall = (mbOptions, rpcinfo, clientDefinition) => {
 }
 
 
-module.exports = {
+export default {
     getServerInstance,
 }
